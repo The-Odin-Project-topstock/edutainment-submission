@@ -1,0 +1,12 @@
+
+#container-container {
+  background-color: black;
+  display: flex;
+  position: absolute;
+  left: 1vw;
+  width: 90vw;
+  height: 60vw;
+  z-index: 1;
+  color: white;
+}
+  
