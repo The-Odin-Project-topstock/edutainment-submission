@@ -289,7 +289,7 @@ function checkAnswer() {
 function testWin() {
   questNum++;
   if (questNum == 4) {
-    if (heroLife == enemyLife) {
+    if (heroLife <= enemyLife) {
       clearAll();
       lose();
       questNum = 0;
