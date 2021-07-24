@@ -8,25 +8,29 @@ let heroLife = fullLife;
 let quest01 = {
   question: "What is an example of ice and gravity creating and moving sediments?",
   answers: ['glaciers move ','icebergs float', 'frost on grass'],
-  bestAnswer: 'a'
+  bestAnswer: 'a',
+  attackImage: "url('images/glacier.png')"
 }
 
 let quest02 = {
   question: "How might an eathquake change the land?",
   answers: ['hardening the ground', 'lowering or raising the ground', 'making a canyon'],
-  bestAnswer: 'b'
+  bestAnswer: 'b',
+  attackImage: "url('images/raise-ground.png')"
 }
 
 let quest03 = {
   question: "What does rain help create on the land?",
   answers: ['oceans', 'limestone caves', 'glaciers'],
-  bestAnswer: 'b'
+  bestAnswer: 'b',
+  attackImage: "url('images/caves.png')"
 }
 
 let quest04 = {
   question: "which fossil indicates the oldest layer of rock?",
   answers: ['trilobite', 't-rex', 'mammoth'],
-  bestAnswer: 'a'
+  bestAnswer: 'a',
+  attackImage: "url('images/trilobite.png')"
 }
 
 let questNum = 0;
@@ -273,27 +277,34 @@ function checkAnswer() {
   if (questNum < 4) {  
     if (answerSelect == currentQuest["bestAnswer"]) {
       enemyLife--;
+      heroAttack();
     } else {
       heroLife--;
-      heroContent = heroLife.toString()
+      enemyAttack();
     }
-    questNum++;
-    currentQuest = questSet[questNum];
   }
+  return
+}
+
+function testWin() {
+  questNum++;
   if (questNum == 4) {
     if (heroLife == enemyLife) {
       clearAll();
       lose();
+      questNum = 0;
       return
     } else if (enemyLife <= heroLife) {
       clearAll();
       win();
+      questNum = 0;
       return
-    }
+    } 
+  } else if (questNum < 4 ) {
+    currentQuest = questSet[questNum];
+    clearAll();
+    populate();
   }
-  clearAll();
-  populate();
-  return
 }
 
 function clickChoiceA() {
@@ -313,6 +324,64 @@ function clickChoiceC() {
   checkAnswer();
   return
 }
+
+function heroAttack() {
+  let heroAttackVar = document.createElement('div');
+  heroAttackVar.style.width = "5vw";
+  heroAttackVar.style.height = "5vw";
+  heroAttackVar.style.position = "absolute"; 
+  heroAttackVar.style.backgroundImage = currentQuest["attackImage"];
+  heroAttackVar.style.backgroundSize = "contain";
+  heroAttackVar.style.zIndex = "5";
+  heroAttackVar.style.top = "20vw";
+
+  let animationContainerVar = document.getElementById('animation-container');
+  animationContainerVar.appendChild(heroAttackVar);
+  let id = null;
+  let pos = 20;
+  clearInterval(id); 
+  id = setInterval(frame, 20);
+  function frame() {
+    if (pos == 70) {
+      clearInterval(id);
+      heroAttackVar.remove();
+      testWin();
+    } else {
+      pos++;
+      heroAttackVar.style.left = pos + 'vw';
+    }
+  }
+  return
+}
+
+function enemyAttack() {
+  let enemyAttackVar = document.createElement('div');
+  enemyAttackVar.style.width = "5vw";
+  enemyAttackVar.style.height = "5vw";
+  enemyAttackVar.style.position = "absolute";
+  enemyAttackVar.style.backgroundImage = currentQuest["attackImage"];
+  enemyAttackVar.style.backgroundSize = "contain";
+  enemyAttackVar.style.zIndex = "5";
+  enemyAttackVar.style.top = "15vw";
+  let animationContainerVar = document.getElementById('animation-container');
+  animationContainerVar.appendChild(enemyAttackVar);
+  let id = null;
+  let pos = 20;
+  clearInterval(id); 
+  id = setInterval(frame, 20);
+  function frame() {
+    if (pos == 70) {
+      clearInterval(id);
+      enemyAttackVar.remove();
+      testWin();
+    } else {
+      pos++;
+      enemyAttackVar.style.right = pos + 'vw';
+    }
+  }
+  return
+}
+
 
 populate();
 
